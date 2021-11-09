@@ -1,23 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  //if you're changing the state at all it's a class component. If you're just passing the state it's a functional component.
+  //session token is going to go here
+  //updateToken will also go here.
+  //Look at the workoutLog. //Gonna have to convert functional compontns to class components.
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* This is where the protectedViews is going to go.  */}
     </div>
   );
 }
