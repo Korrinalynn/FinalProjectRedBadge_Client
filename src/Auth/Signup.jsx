@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import {AuthContext} from '../Auth/AuthContext';
 
 class Signup extends Component {
     constructor(props) {
@@ -17,39 +18,52 @@ class Signup extends Component {
     }
 
     handleSubmit = (e) => {
-        fetch("http://localhost:3000/api/character", {
+        fetch("http://localhost:3000/character", {
             method: 'POST',
-            body: JSON.stringify({user:this.state}),
+            body: JSON.stringify({character:this.state}),
             headers: new Headers({
                 'Content-Type': 'application/json'
             })
         }).then(
             (response) => response.json()
         ).then((data) => {
-            this.props.setToken(data.sessionToken)
+            this.props.auth.setToken(data.sessionToken)
         }) 
         e.preventDefault()
     }
 
+    validateSignUp = (event) => {
+        this.setState({
+            errorMessage:'Fields must not be empty'
+        })
+        event.preventDefault();
+    }
+
     render() {
+        const submitHandler = !this.state.email ? this.validateSignUp : this.handleSubmit
         return (
             <div>
                 <h1>Sign Up</h1>
                 <h6>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus repellat, atque nulla, soluta vero reprehenderit numquam incidunt, rem quaerat quos voluptatum perferendis. Distinctio culpa iste atque blanditiis placeat qui ipsa?</h6>
-                <Form onSubmit={this.handleSubmit} >
+                <Form onSubmit={submitHandler} >
                     <FormGroup>
-                        <Label for="email">Email</Label>
-                        <Input id="email" type="text" name="email" placeholder="enter email" />
+                        <Label for="email">email</Label>
+                        <Input id="email" type="text" name="email" placeholder="enter email" onChange={this.handleChange} />
+                        {this.state.errorMessage && <span className="error">email is required</span>}
                     </FormGroup>
                     <FormGroup>
                         <Label for="password">Password</Label>
-                        <Input id="su_password" type="password" name="password" placeholder="enter password" />
+                        <Input id="su_password" type="password" name="password" placeholder="enter password" onChange={this.handleChange} />
                     </FormGroup>
-                    <Button type="submit"> Sign up </Button>
+                    <Button type="submit"> Submit </Button>
                 </Form>
             </div>
         )
     }
 }
 
-export default Signup;
+export default props => (
+    <AuthContext.Consumer>
+      {auth => <Signup {...props} auth={auth} />}
+    </AuthContext.Consumer>
+);

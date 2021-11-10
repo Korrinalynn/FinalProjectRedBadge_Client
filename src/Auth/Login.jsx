@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import {AuthContext} from '../Auth/AuthContext';
 
 class Login extends Component {
     constructor(props) {
@@ -19,14 +20,14 @@ class Login extends Component {
     handleSubmit = (e) => {
         fetch("http://localhost:3000/api/login", {
             method: 'POST',
-            body: JSON.stringify({user:this.state}),
+            body: JSON.stringify({character:this.state}),
             headers: new Headers({
                 'Content-Type': 'application/json'
                 })
         }).then(
             (response) => response.json()
         ).then((data) => {
-            this.props.setToken(data.sessionToken)
+            this.props.auth.setToken(data.sessionToken)
         }) 
         e.preventDefault()
     }
@@ -51,4 +52,9 @@ class Login extends Component {
         )
     }
 }
-export default Login;
+
+export default props => (
+    <AuthContext.Consumer>
+      {auth => <Login {...props} auth={auth} />}
+    </AuthContext.Consumer>
+  );

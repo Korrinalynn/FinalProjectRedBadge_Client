@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 import Auth from "./Auth/Auth";
-import NavBar from "./Home/Navbar";
-import Splash from "./Home/Splash";
+import {AuthContext} from './Auth/AuthContext';
+import QuestionIndex from './Questions/QuestionIndex';
+import SiteBar from "./Home/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {
   constructor() {
     super();
+    this.setToken = (token) => {
+      localStorage.setItem('token', token);
+      this.setState({ sessionToken: token });
+    }
     this.state = {
-      sessionToken: "",
-    };
+      sessionToken: '',
+      setToken: this.setToken
+    }
   }
 
   componentWillMount() {
@@ -34,14 +40,14 @@ class App extends Component {
       return (
         <Switch>
           <Route path="/" exact>
-            <Splash sessionToken={this.state.sessionToken} />
+            <QuestionIndex />
           </Route>
         </Switch>
       );
     } else {
       return (
         <Route path="/auth">
-          <Auth setToken={this.setSessionState} />
+          <Auth />
         </Route>
       );
     }
@@ -50,10 +56,12 @@ class App extends Component {
   render() {
     return (
       <Router>
+        <AuthContext.Provider value={this.state}>
         <div>
-          <NavBar clickLogout={this.logout} />
+          <SiteBar clickLogout={this.logout} />
           {this.protectedViews()}
         </div>
+        </AuthContext.Provider>
       </Router>
     );
   }
