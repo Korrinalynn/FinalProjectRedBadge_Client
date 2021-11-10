@@ -18,7 +18,7 @@ class QuestionIndex extends React.Component {
   }
 
   fetchQuestions = () => {
-    fetch("http://localhost:3000/api/log", {
+    fetch("http://localhost:3000/questions", {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ class QuestionIndex extends React.Component {
       })
     })
       .then((res) => res.json())
-      .then((logData) => {
-        return this.setState({ questions: logData })
+      .then((questionData) => {
+        return this.setState({ questions: questionData })
       })
   }
 
@@ -36,7 +36,7 @@ class QuestionIndex extends React.Component {
       <Container>
         <Row>
           <Col md="3">
-            {/* the create component will go here*/}
+            <QuestionCreate token={this.props.token} updateQuestionsArray={this.fetchQuestions}/>
           </Col>
           <Col md="9">
             <h2>Ask a question</h2>

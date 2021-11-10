@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Auth from "./auth/Auth";
-import NavBar from "./home/NavBar";
-import Splash from "./home/Splash";
+import Auth from "./Auth/Auth";
+import NavBar from "./Home/Navbar";
+import Splash from "./Home/Splash";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {

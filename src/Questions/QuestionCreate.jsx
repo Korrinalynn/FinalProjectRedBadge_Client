@@ -18,7 +18,7 @@ class QuestionCreate extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:3000/api/question/`, {
+        fetch(`http://localhost:3000/questions`, {
             method: 'POST',
             body: JSON.stringify({ question: this.state }),
             headers: new Headers({
