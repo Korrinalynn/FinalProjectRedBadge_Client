@@ -1,38 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import Sitebar from './Home/Navbar';
-import Auth from './Auth/Auth';
+import React, { Component } from "react";
+import Auth from "./Auth/Auth";
+import {AuthContext} from './Auth/AuthContext';
+import QuestionIndex from './Questions/QuestionIndex';
+import SiteBar from "./Home/Navbar";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-function App() {
-
-  const [sessionToken, setSessionToken] = useState('');
-
-  useEffect(() => {
-    if (localStorage.getItem('token')){
-      setSessionToken(localStorage.getItem('token'));
+class App extends Component {
+  constructor() {
+    super();
+    this.setToken = (token) => {
+      localStorage.setItem('token', token);
+      this.setState({ sessionToken: token });
     }
-  }, [])
-
-  const updateToken = (newToken) => {
-    localStorage.setItem('token', newToken);
-    setSessionToken(newToken);
-    console.log(sessionToken);
+    this.state = {
+      sessionToken: '',
+      setToken: this.setToken
+    }
   }
 
-  const clearToken = () => {
+  componentWillMount() {
+    const token = localStorage.getItem("token");
+    if (token && !this.state.sessionToken) {
+      this.setState({ sessionToken: token });
+    }
+  }
+
+  setSessionState = (token) => {
+    localStorage.setItem("token", token);
+    this.setState({ sessionToken: token });
+  };
+
+  logout = () => {
+    this.setState({ sessionToken: "" });
     localStorage.clear();
-    setSessionToken('');
-  }
+  };
 
-  const protectedViews = () => {
-    return (sessionToken === localStorage.getItem('token') ? <WorkoutIndex token={sessionToken}/> : <Auth updateToken={updateToken}/>)
+  protectedViews = () => {
+    if (this.state.sessionToken === localStorage.getItem("token")) {
+      return (
+        <Switch>
+          <Route path="/" exact>
+            <QuestionIndex />
+          </Route>
+        </Switch>
+      );
+    } else {
+      return (
+        <Route path="/auth">
+          <Auth />
+        </Route>
+      );
+    }
+  };
+  
+  render() {
+    return (
+      <Router>
+        <AuthContext.Provider value={this.state}>
+        <div>
+          <SiteBar clickLogout={this.logout} />
+          {this.protectedViews()}
+        </div>
+        </AuthContext.Provider>
+      </Router>
+    );
   }
-
-  return (
-    <div>
-      <Sitebar clearToken={clearToken} />
-      {protectedViews()}
-    </div>
-  );
 }
 
 export default App;
+//if you're changing the state at all it's a class component. If you're just passing the state it's a functional component.
+//session token is going to go here
+//updateToken will also go here.
+//Look at the workoutLog. //Gonna have to convert functional components to class components.
