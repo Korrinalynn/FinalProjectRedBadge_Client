@@ -1,7 +1,6 @@
 //This is where all of your other Question Components are gonna be (QuestionsCreate, QuestionEdit, QuestionTable)
 //Put fetchAll Questions in here
 import React from 'react';
-import {AuthContext} from '../Auth/AuthContext';
 import QuestionCreate from './QuestionCreate';
 import QuestionTable from './QuestionTable';
 import QuestionEdit from './QuestionEdit';
@@ -23,11 +22,11 @@ class QuestionIndex extends React.Component {
   }
 
   fetchQuestions = () => {
-    fetch("http://localhost:3000/questions", {
+    fetch("http://localhost:3000/questions/get", {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': this.props.auth.sessionToken
+        'Authorization': this.props.sessionToken
       })
     })
       .then((res) => res.json())
@@ -42,7 +41,7 @@ class QuestionIndex extends React.Component {
       body: JSON.stringify({ log: question }),
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': this.props.auth.sessionToken
+        'Authorization': this.props.sessionToken
       })
     })
     .then((res) => {
@@ -64,7 +63,7 @@ class QuestionIndex extends React.Component {
       body: JSON.stringify({ log: { id: e.target.id } }),
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': this.props.auth.sessionToken
+        'Authorization': this.props.sessionToken
       })
     })
     .then((res) => this.fetchQuestions())
@@ -95,8 +94,4 @@ class QuestionIndex extends React.Component {
   }
 }
 
-export default props => (
-  <AuthContext.Consumer>
-    {auth => <QuestionIndex {...props} auth={auth} />}
-  </AuthContext.Consumer>
-);
+export default QuestionIndex;
