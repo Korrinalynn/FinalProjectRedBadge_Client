@@ -17,7 +17,7 @@ class Login extends Component {
     }
 
     handleSubmit = (e) => {
-        fetch("http://localhost:3000/api/login", {
+        fetch("http://localhost:3000/character/login", {
             method: 'POST',
             body: JSON.stringify({character:this.state}),
             headers: new Headers({
@@ -39,11 +39,13 @@ class Login extends Component {
                 <Form>
                     <FormGroup>
                         <Label for="email">Email</Label>
-                        <Input id="li_email" type="text" name="email" placeholder="enter email" />
+                        <Input id="li_email" type="text" name="email" placeholder="enter email" onChange={this.handleSubmit}/>
+                        {this.state.errorMessage && <span className="error">E-mail is required</span>}
                     </FormGroup>
                     <FormGroup>
                         <Label for="password">Password</Label>
-                        <Input id="li_password" type="password" name="password" placeholder="enter password" />
+                        <Input id="li_password" type="password" name="password" placeholder="enter password" onChange={this.handleSubmit}/>
+                        {this.state.errorMessage && <span className="error">Password is required</span>}
                     </FormGroup>
                     <Button type="submit"> Login </Button>
                 </Form>

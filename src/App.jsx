@@ -39,32 +39,29 @@ class App extends Component {
     this.setState({ sessionToken: token });
   };
 
-  logout = () => {
-    this.setState({ sessionToken: "" });
+  logout() {
     localStorage.clear();
+    this.setState({ sessionToken: "" });
   };
 
   protectedViews = () => {
-    if (this.state.sessionToken === localStorage.getItem("token")) {
-      return (
-        <Switch>
+    return (this.state.sessionToken === localStorage.getItem("token") ? 
+    <div>
           <Route path="/" exact>
             <QuestionIndex />
           </Route>
-        </Switch>
-      );
-    } else {
-      return (
+
+    </div>
+      :
           <Auth setToken={this.setToken}/>
-      );
-    }
+    )
   };
   
   render() {
     return (
       <Router>
         <div>
-          <SiteBar clickLogout={this.logout} />
+          <SiteBar logout={this.logout.bind(this)} />
           {this.protectedViews()}
         </div>
       </Router>

@@ -13,6 +13,7 @@ import {
 class SiteBar extends React.Component {
     constructor(props) {
         super(props);
+        console.log(this.props, "this is coming form navbar")
         this.state = {
             isOpen: false
         };
@@ -33,7 +34,7 @@ class SiteBar extends React.Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <Button onClick={() => this.props.clickLogout()}>Logout</Button>
+                                <Button onClick={this.props.logout}>Logout</Button>
                             </NavItem>
                         </Nav>
                     </Collapse>

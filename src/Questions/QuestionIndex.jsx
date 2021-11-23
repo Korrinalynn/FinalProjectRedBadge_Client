@@ -17,9 +17,9 @@ class QuestionIndex extends React.Component {
     }
   }
 
-  componentWillMount() {
-    this.fetchQuestions()
-  }
+  // componentWillMount() {
+  //   this.fetchQuestions()
+  // }
 
   fetchQuestions = () => {
     fetch("http://localhost:3000/questions/get", {
