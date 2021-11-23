@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import {AuthContext} from '../Auth/AuthContext';
 
 class QuestionCreate extends Component {
     constructor(props) {
@@ -19,12 +18,12 @@ class QuestionCreate extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:3000/questions`, {
+        fetch(`http://localhost:3000/questions/create`, {
             method: 'POST',
             body: JSON.stringify({ question: this.state }),
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': this.props.auth.sessionToken
+                'Authorization': this.props.sessionToken
             })
         })
         .then((res) => res.json())
@@ -54,8 +53,4 @@ class QuestionCreate extends Component {
     }
 }
 
-export default props => (
-    <AuthContext.Consumer>
-      {auth => <QuestionCreate {...props} auth={auth} />}
-    </AuthContext.Consumer>
-);
+export default QuestionCreate;

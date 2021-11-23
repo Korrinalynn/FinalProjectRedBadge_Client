@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import {AuthContext} from '../Auth/AuthContext';
 
 class Login extends Component {
     constructor(props) {
@@ -18,7 +17,7 @@ class Login extends Component {
     }
 
     handleSubmit = (e) => {
-        fetch("http://localhost:3000/api/login", {
+        fetch("http://localhost:3000/character/login", {
             method: 'POST',
             body: JSON.stringify({character:this.state}),
             headers: new Headers({
@@ -27,7 +26,7 @@ class Login extends Component {
         }).then(
             (response) => response.json()
         ).then((data) => {
-            this.props.auth.setToken(data.sessionToken)
+            this.props.setToken(data.sessionToken)
         }) 
         e.preventDefault()
     }
@@ -40,11 +39,13 @@ class Login extends Component {
                 <Form>
                     <FormGroup>
                         <Label for="email">Email</Label>
-                        <Input id="li_email" type="text" name="email" placeholder="enter email" />
+                        <Input id="li_email" type="text" name="email" placeholder="enter email" onChange={this.handleSubmit}/>
+                        {this.state.errorMessage && <span className="error">E-mail is required</span>}
                     </FormGroup>
                     <FormGroup>
                         <Label for="password">Password</Label>
-                        <Input id="li_password" type="password" name="password" placeholder="enter password" />
+                        <Input id="li_password" type="password" name="password" placeholder="enter password" onChange={this.handleSubmit}/>
+                        {this.state.errorMessage && <span className="error">Password is required</span>}
                     </FormGroup>
                     <Button type="submit"> Login </Button>
                 </Form>
@@ -53,8 +54,4 @@ class Login extends Component {
     }
 }
 
-export default props => (
-    <AuthContext.Consumer>
-      {auth => <Login {...props} auth={auth} />}
-    </AuthContext.Consumer>
-  );
+export default Login;
