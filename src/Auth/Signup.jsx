@@ -10,7 +10,7 @@ class Signup extends Component {
             characterName: '',
             level: 0,
             bio: '',
-            isAdmin: ''
+            isAdmin: false
         };
     }
 
@@ -78,7 +78,8 @@ class Signup extends Component {
                         <Label for="characterName">Character Name</Label>
                         <Input id="su_characterName" type="text" name="characterName" placeholder="enter character name" onChange={(e) => this.setState({characterName: e.target.value})} />
                     </FormGroup>
-                    <input name="level" onChange={(e) => this.levelChange(e)}/>
+                    <Label for="level">Level</Label>
+                    <input name="level" placeholder="enter your level" onChange={(e) => this.levelChange(e)}/>
                     {/* <FormGroup>
                         <Label for="level">Level</Label>
                         <Input id="su_level" name="level" onChange={(e) => this.levelChange(e)} />      
