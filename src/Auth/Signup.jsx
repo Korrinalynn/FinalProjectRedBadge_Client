@@ -1,42 +1,98 @@
-import React, {useState} from 'react';
+import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
-const Signup = (props) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+class Signup extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            email: '',
+            password: '',
+            characterName: '',
+            level: 0,
+            bio: '',
+            isAdmin: false
+        };
+    }
 
-    let handleSubmit = (event) => {
-        event.preventDefault();
-        fetch("http://localhost:3004/user/register", {
+    // handleChange = (e) => {
+    //     this.setState({
+    //         [e.target.name]: e.target.value,
+    //     });
+    // }
+
+    handleSubmit = (e) => {
+        console.log(typeof this.state.level)
+        e.preventDefault();
+        fetch("http://localhost:3000/character/register", {
             method: 'POST',
-            body: JSON.stringify({user:{username: username, passwordhash: password}}),
+            body: JSON.stringify({
+                character: {
+                    email: this.state.email,
+                    password: this.state.password,
+                    characterName: this.state.characterName,
+                    level: this.state.level,
+                    bio: this.state.bio,
+                    isAdmin: this.state.isAdmin
+                }
+                }),
             headers: new Headers({
                 'Content-Type': 'application/json'
             })
-        }).then(
-            (response) => response.json()
-        ).then((data) => {
-            props.updateToken(data.sessionToken)
+        }).then( response => response.json())
+        .then(data => {
+            console.log(data);
+            console.log(data.sessionToken, "this is coming from line 43");
+            this.props.setToken(data.sessionToken)
         })
-        console.log(username, password);
     }
 
-    return (
-        <div>
-            <h1>Sign Up</h1>
-            <Form onSubmit={handleSubmit}>
-                <FormGroup>
-                    <Label htmlFor="username">Username</Label>
-                    <Input onChange={(e) => setUsername(e.target.value)} name="username" value={username}/>
-                </FormGroup>
-                <FormGroup>
-                    <Label htmlFor="password">Password</Label>
-                    <Input onChange={(e) => setPassword(e.target.value)} name="password" value={password}/>
-                </FormGroup>
-                <Button type="submit">Signup</Button>
-            </Form>
-        </div>
-    )
+    levelChange = (e) => {
+        this.setState({
+            level: parseInt(e.target.value)
+        })
+        console.log(typeof this.state.level)
+    }
+
+    // validateSignUp = (event) => {
+    //     this.setState({
+    //         errorMessage:'Fields must not be empty'
+    //     })
+    //     event.preventDefault();
+    // }
+
+    render() {
+        return (
+            <div>
+                <h1>Sign Up</h1>
+                <h6>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus repellat, atque nulla, soluta vero reprehenderit numquam incidunt, rem quaerat quos voluptatum perferendis. Distinctio culpa iste atque blanditiis placeat qui ipsa?</h6>
+                <Form onSubmit={this.handleSubmit} >
+                    <FormGroup>
+                        <Label for="email">E-mail</Label>
+                        <Input id="email" type="email" name="email" placeholder="enter email" onChange={(e) => this.setState({email: e.target.value})} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input id="su_password" type="password" name="password" placeholder="enter password" onChange={(e) => this.setState({password: e.target.value})} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="characterName">Character Name</Label>
+                        <Input id="su_characterName" type="text" name="characterName" placeholder="enter character name" onChange={(e) => this.setState({characterName: e.target.value})} />
+                    </FormGroup>
+                    <Label for="level">Level</Label>
+                    <input name="level" placeholder="enter your level" onChange={(e) => this.levelChange(e)}/>
+                    {/* <FormGroup>
+                        <Label for="level">Level</Label>
+                        <Input id="su_level" name="level" onChange={(e) => this.levelChange(e)} />      
+                    </FormGroup> */}
+                    <FormGroup>
+                        <Label for="bio">Bio</Label>
+                        <Input id="su_bio" type="bio" name="bio" placeholder="enter bio" onChange={(e) => this.setState({bio: e.target.value})} />
+                    </FormGroup>
+                    <Button type="submit"> Submit </Button>
+                </Form>
+            </div>
+        )
+    }
 }
 
 export default Signup;
